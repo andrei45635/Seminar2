@@ -5,24 +5,21 @@ import org.example.seminar1.models.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StackContainer extends LFIFO {
-    //LastInFirstOut
-    private final List<Task> stack = new ArrayList<>(); //final = nu mai putem atribui alta instanta
-    //private Task[] arr_stack = new Task[]; //tip primitiv, mai rapid decat wrapper
-
+public class QueueContainer extends LFIFO{
+    private final List<Task> queue = new ArrayList<>();
     @Override
     public Task remove() {
-        return stack.remove(size() - 1);
+        return queue.remove(queue.size() - 1);
     }
 
     @Override
     public void add(Task task) {
-        stack.add(task);
+        queue.add(queue.size() - 1, task);
     }
 
     @Override
     public int size() {
-        return stack.size();
+        return queue.size();
     }
 
     @Override

@@ -54,16 +54,20 @@ public class Main {
         List<Task> tasks = taskCreator();
 
         TaskRunner strategyTaskRunner = new StrategyTaskRunner(Strategy.LIFO);
+        TaskRunner delayTaskRunner = new StrategyTaskRunner(Strategy.LIFO);
         TaskRunner printerTaskRunner = new PrinterTaskRunner(strategyTaskRunner);
 
         for (Task task : tasks) {
             //strategyTaskRunner.addTask(task);
-            printerTaskRunner.addTask(task);
+            //printerTaskRunner.addTask(task);
+            delayTaskRunner.addTask(task);
         }
         //System.out.println("Strategy Task Runner: ");
         //strategyTaskRunner.executeAll();
         //System.out.println("\n");
-        System.out.println("Printer Task Runner: ");
-        printerTaskRunner.executeAll();
+        //System.out.println("Printer Task Runner: ");
+        //printerTaskRunner.executeAll();
+        System.out.println("Delay Task Runner: ");
+        delayTaskRunner.executeAll();
     }
 }
