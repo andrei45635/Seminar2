@@ -4,6 +4,7 @@ import org.example.seminar1.factories.Strategy;
 import org.example.seminar1.models.Message;
 import org.example.seminar1.models.MessageTask;
 import org.example.seminar1.models.Task;
+import org.example.seminar1.runners.DelayTaskRunner;
 import org.example.seminar1.runners.PrinterTaskRunner;
 import org.example.seminar1.runners.StrategyTaskRunner;
 import org.example.seminar1.runners.TaskRunner;
@@ -11,11 +12,12 @@ import org.example.seminar1.runners.TaskRunner;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
         testMessage();
-        testTaskRunner();
+        testTaskRunner(args);
     }
 
     private static void testMessage() {
@@ -50,23 +52,46 @@ public class Main {
         return tasks;
     }
 
-    private static void testTaskRunner() {
-        List<Task> tasks = taskCreator();
+    private static void testTaskRunner(String[] args) {
+        List<Task> tasks1 = taskCreator();
+        List<Task> tasks2 = taskCreator();
+        List<Task> tasks3 = taskCreator();
 
-        TaskRunner strategyTaskRunner = new StrategyTaskRunner(Strategy.LIFO);
-        TaskRunner delayTaskRunner = new StrategyTaskRunner(Strategy.LIFO);
+        if(args.length != 1){
+            System.out.println("Introduceti doar o strategie!\n");
+            return;
+        }
+
+        Strategy strat = null;
+        
+        if(Objects.equals(args[0], "LIFO")){
+            strat = Strategy.valueOf("LIFO");
+        } else if(Objects.equals(args[0], "FIFO")){
+            strat = Strategy.valueOf("FIFO");
+        }
+
+        TaskRunner strategyTaskRunner = new StrategyTaskRunner(strat);
+        TaskRunner delayTaskRunner = new DelayTaskRunner(strategyTaskRunner);
         TaskRunner printerTaskRunner = new PrinterTaskRunner(strategyTaskRunner);
 
-        for (Task task : tasks) {
-            //strategyTaskRunner.addTask(task);
-            //printerTaskRunner.addTask(task);
+        for (Task task : tasks1) {
+            strategyTaskRunner.addTask(task);
+        }
+
+        System.out.println("Strategy Task Runner: ");
+        strategyTaskRunner.executeAll();
+
+        for(Task task: tasks2){
+            printerTaskRunner.addTask(task);
+        }
+
+        System.out.println("Printer Task Runner: ");
+        printerTaskRunner.executeAll();
+
+        for(Task task: tasks3){
             delayTaskRunner.addTask(task);
         }
-        //System.out.println("Strategy Task Runner: ");
-        //strategyTaskRunner.executeAll();
-        //System.out.println("\n");
-        //System.out.println("Printer Task Runner: ");
-        //printerTaskRunner.executeAll();
+
         System.out.println("Delay Task Runner: ");
         delayTaskRunner.executeAll();
     }

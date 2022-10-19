@@ -9,12 +9,12 @@ public class QueueContainer extends LFIFO{
     private final List<Task> queue = new ArrayList<>();
     @Override
     public Task remove() {
-        return queue.remove(queue.size() - 1);
+        return queue.remove(0);
     }
 
     @Override
     public void add(Task task) {
-        queue.add(queue.size() - 1, task);
+        queue.add(queue.size(), task);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.example.seminar1.runners;
 
 import org.example.seminar1.containers.Container;
-import org.example.seminar1.containers.StackContainer;
 import org.example.seminar1.factories.Strategy;
 import org.example.seminar1.factories.TaskContainerFactory;
 import org.example.seminar1.models.Task;
