@@ -8,16 +8,21 @@ import org.example.seminar1.runners.DelayTaskRunner;
 import org.example.seminar1.runners.PrinterTaskRunner;
 import org.example.seminar1.runners.StrategyTaskRunner;
 import org.example.seminar1.runners.TaskRunner;
+import org.example.seminar1.sorters.AbstractSorter;
+import org.example.seminar1.sorters.BubbleSort;
+import org.example.seminar1.sorters.QuickSort;
+import org.example.seminar1.sorters.SortingTask;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
         testMessage();
         testTaskRunner(args);
+        testSorters();
+        testQuickSorter();
     }
 
     private static void testMessage() {
@@ -25,6 +30,20 @@ public class Main {
         for (Task task : tasks) {
             System.out.println(task);
         }
+    }
+
+    private static void testSorters() {
+        int[] numere1 = {11, 2, 5, 3, 16, 12, 10};
+        AbstractSorter bubble_sorter = new BubbleSort(numere1);
+        SortingTask sorter1 = new SortingTask("2", "d2", bubble_sorter);
+        sorter1.execute();
+    }
+
+    private static void testQuickSorter(){
+        int[] numere2 = {14, 11, 2, 5, 76, 1, 3};
+        AbstractSorter quick_sorter = new QuickSort(numere2);
+        SortingTask sorter2 = new SortingTask("3", "d3", quick_sorter);
+        sorter2.execute();
     }
 
     private static List<Task> taskCreator() {
@@ -57,18 +76,12 @@ public class Main {
         List<Task> tasks2 = taskCreator();
         List<Task> tasks3 = taskCreator();
 
-        if(args.length != 1){
+        if (args.length != 1) {
             System.out.println("Introduceti doar o strategie!\n");
             return;
         }
 
-        Strategy strat = null;
-        
-        if(Objects.equals(args[0], "LIFO")){
-            strat = Strategy.valueOf("LIFO");
-        } else if(Objects.equals(args[0], "FIFO")){
-            strat = Strategy.valueOf("FIFO");
-        }
+        Strategy strat = Strategy.valueOf(args[0]);
 
         TaskRunner strategyTaskRunner = new StrategyTaskRunner(strat);
         TaskRunner delayTaskRunner = new DelayTaskRunner(strategyTaskRunner);
@@ -81,14 +94,14 @@ public class Main {
         System.out.println("Strategy Task Runner: ");
         strategyTaskRunner.executeAll();
 
-        for(Task task: tasks2){
+        for (Task task : tasks2) {
             printerTaskRunner.addTask(task);
         }
 
         System.out.println("Printer Task Runner: ");
         printerTaskRunner.executeAll();
 
-        for(Task task: tasks3){
+        for (Task task : tasks3) {
             delayTaskRunner.addTask(task);
         }
 
